@@ -1,0 +1,20 @@
+[package]
+name = "new_arc"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+sqlite = []
+mysql = []
+
+[dependencies]
+libfj = { version = "0.6", features = ["robocraft", "simple"] }
+
+#diesel = { version = "*", features = ["sqlite"] }
+#diesel = { version = "*", features = ["mysql", "mysql_backend"] }
+diesel = { version = "*", features = ["sqlite", "mysql", "mysql_backend"] }
+
+lazy_static = "*"
+clap = { version = "*", features = ["derive"] }
+macros = { path = "macros" }
+itertools = "*"
