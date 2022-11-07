@@ -258,7 +258,7 @@ fn build_state(db: &mut DbConnection) -> DbState {
     let contruct = |last_page_size| DbState {
         last_page_size,
         id: 0,
-        next_page: 1600,
+        next_page: 0,
         last_sequential_id: u32::MAX as _,
     };
     if config.new || config.known {
