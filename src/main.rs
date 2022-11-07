@@ -259,7 +259,7 @@ fn build_state(db: &mut DbConnection) -> DbState {
         last_page_size,
         id: 0,
         next_page: 0,
-        last_sequential_id: i32::MAX as _,
+        last_sequential_id: u32::MAX as _,
     };
     if config.new || config.known {
         contruct(config.size.unwrap_or(DEFAULT_PAGE_SIZE))
