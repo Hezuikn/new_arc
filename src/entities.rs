@@ -23,9 +23,9 @@ pub fn build_database(db: &mut DbConnection) {
     );
     CREATE TABLE IF NOT EXISTS ROBOT_CUBES (
         id INTEGER NOT NULL PRIMARY KEY,
-        cube_data TEXT NOT NULL,
+        cube_data LONGTEXT NOT NULL,
         colour_data LONGTEXT NOT NULL,
-        cube_amounts TEXT NOT NULL
+        cube_amounts LONGTEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS STATE (
         id INTEGER NOT NULL PRIMARY KEY,
