@@ -24,14 +24,14 @@ pub fn build_database(db: &mut DbConnection) {
     CREATE TABLE IF NOT EXISTS ROBOT_CUBES (
         id INTEGER NOT NULL PRIMARY KEY,
         cube_data TEXT NOT NULL,
-        colour_data TEXT NOT NULL,
+        colour_data LONGTEXT NOT NULL,
         cube_amounts TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS STATE (
         id INTEGER NOT NULL PRIMARY KEY,
         next_page INTEGER NOT NULL,
         last_page_size INTEGER NOT NULL,
-        last_sequential_id INTEGER NOT NULL
+        last_sequential_id BIGINT NOT NULL
     );
     COMMIT;",
     )
