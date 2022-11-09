@@ -19,7 +19,8 @@ pub fn build_database(db: &mut DbConnection) {
         buyable INTEGER NOT NULL,
         featured INTEGER NOT NULL,
         combat_rating REAL NOT NULL,
-        cosmetic_rating REAL NOT NULL
+        cosmetic_rating REAL NOT NULL,
+        timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE IF NOT EXISTS ROBOT_CUBES (
         id INTEGER NOT NULL PRIMARY KEY,
