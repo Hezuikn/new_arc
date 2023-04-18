@@ -1,10 +1,10 @@
 //MysqlConnection
 pub use diesel::connection::SimpleConnection;
 
-#[cfg(feature = "sqlite")]
-pub use diesel::SqliteConnection as DbConnection;
 #[cfg(feature = "mysql")]
 pub use diesel::MysqlConnection as DbConnection;
+#[cfg(feature = "sqlite")]
+pub use diesel::SqliteConnection as DbConnection;
 
 #[cfg(not(any(feature = "sqlite", feature = "mysql")))]
 compile_error!("choose sql:\n--features sqlite\n--features mysql");

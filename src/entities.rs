@@ -1,3 +1,6 @@
+use chrono::offset::Utc;
+use diesel::prelude::*;
+use diesel::sql_types::Timestamp;
 use new_arc::*;
 
 pub fn build_database(db: &mut DbConnection) {
@@ -20,7 +23,9 @@ pub fn build_database(db: &mut DbConnection) {
         featured INTEGER NOT NULL,
         combat_rating REAL NOT NULL,
         cosmetic_rating REAL NOT NULL,
-        timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        lastupdatet TIMESTAMP NOT NULL,
+        stillexist  REAL NOT NULL
     );
     CREATE TABLE IF NOT EXISTS ROBOT_CUBES (
         id INTEGER NOT NULL PRIMARY KEY,
@@ -32,13 +37,15 @@ pub fn build_database(db: &mut DbConnection) {
         id INTEGER NOT NULL PRIMARY KEY,
         next_page INTEGER NOT NULL,
         last_page_size INTEGER NOT NULL,
-        last_sequential_id BIGINT NOT NULL
+        last_sequential_id BIGINT NOT NULL,
+        last_page_testet BIGINT NOT Null
     );
     COMMIT;",
     )
     .unwrap();
 }
 
+/// state of bots (id,next_page,..)
 #[derive(Clone, Debug, QueryableByName, Queryable, Insertable, macros::Table)]
 #[name_table(STATE)]
 #[diesel(table_name = STATE)]
@@ -47,8 +54,11 @@ pub struct DbState {
     pub next_page: i64,
     pub last_page_size: i64,
     pub last_sequential_id: i64,
+    pub last_page_testet: i64,
 }
 
+//TODO add timestamp and lastedited (timestamp)
+//TODO date as date type
 #[derive(Clone, Debug, QueryableByName, Queryable, Insertable, macros::Table)]
 #[name_table(ROBOT_METADATA)]
 #[diesel(table_name = ROBOT_METADATA)]
@@ -69,8 +79,12 @@ pub struct DbMetaData {
     pub featured: bool,
     pub combat_rating: f32,
     pub cosmetic_rating: f32,
+    pub timestamp: Timestamp,
+    pub lastupdatet: Timestamp,
+    pub still_exist: bool,
 }
 
+//TODO lernen was das macht
 macro_rules! meta_data_selection {
     ($ty:ident) => {
         impl From<$ty> for DbMetaData {
@@ -92,6 +106,9 @@ macro_rules! meta_data_selection {
                     featured: other.featured,
                     combat_rating: other.combat_rating,
                     cosmetic_rating: other.cosmetic_rating,
+                    timestamp: Utc::now().naive_utc(),
+                    lastupdatet: Utc::now().naive_utc(),
+                    still_exist: true,
                 }
             }
         }

@@ -33,6 +33,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
                     "String" => "Text",
                     "f32" => "Float",
                     "bool" => "Bool",
+                    //"Timestamp" => "Timestamp",
                     _ => panic!("unknown type: {x}"),
                 };
                 syn::Ident::new(x, ident.span())

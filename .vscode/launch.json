@@ -1,0 +1,67 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'new_arc'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=new_arc",
+                    "--features=sqlite"
+                ],
+                "filter": {
+                    "name": "new_arc",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'new_arc'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=new_arc",
+                    "--package=new_arc",
+                    "--features=sqlite"
+                ],
+                "filter": {
+                    "name": "new_arc",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'new_arc'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=new_arc",
+                    "--package=new_arc",
+                    "--features=sqlite"
+                ],
+                "filter": {
+                    "name": "new_arc",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

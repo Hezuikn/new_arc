@@ -8,13 +8,14 @@ sqlite = []
 mysql = []
 
 [dependencies]
-libfj = { version = "0.6", features = ["robocraft", "simple"] }
+libfj = { version = "0.7.1", features = ["robocraft", "simple"] }
 
 #diesel = { version = "*", features = ["sqlite"] }
 #diesel = { version = "*", features = ["mysql", "mysql_backend"] }
-diesel = { version = "*", features = ["sqlite", "mysql", "mysql_backend"] }
+diesel = { version = "2.0.3", features = ["chrono","sqlite", "mysql", "mysql_backend"] }
 
 lazy_static = "*"
 clap = { version = "*", features = ["derive"] }
 macros = { path = "macros" }
 itertools = "*"
+chrono = "0.4.24"
