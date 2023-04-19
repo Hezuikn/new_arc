@@ -1,6 +1,4 @@
-use chrono::offset::Utc;
 use diesel::prelude::*;
-use diesel::sql_types::Timestamp;
 use new_arc::*;
 
 pub fn build_database(db: &mut DbConnection) {
@@ -57,6 +55,9 @@ pub struct DbState {
     pub last_page_testet: i64,
 }
 
+use chrono::naive::NaiveDateTime;
+use chrono::Utc;
+
 //TODO add timestamp and lastedited (timestamp)
 //TODO date as date type
 #[derive(Clone, Debug, QueryableByName, Queryable, Insertable, macros::Table)]
@@ -79,8 +80,8 @@ pub struct DbMetaData {
     pub featured: bool,
     pub combat_rating: f32,
     pub cosmetic_rating: f32,
-    pub timestamp: Timestamp,
-    pub lastupdatet: Timestamp,
+    pub timestamp: NaiveDateTime,
+    pub lastupdatet: NaiveDateTime,
     pub still_exist: bool,
 }
 
