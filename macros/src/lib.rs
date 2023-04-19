@@ -1,47 +1,50 @@
 use itertools::Itertools;
 use proc_macro::TokenStream;
-use quote::quote;
-use syn::{parse_macro_input, DeriveInput, PathArguments};
+use quote::{quote, quote_spanned};
+use syn::{parse_macro_input, spanned::Spanned, DeriveInput, PathArguments};
 
 #[proc_macro_derive(Table, attributes(name_table))]
 pub fn derive(input: TokenStream) -> TokenStream {
     let input: DeriveInput = parse_macro_input!(input);
     let mut output = quote! {};
-    let fields = match &input.data {
-        syn::Data::Struct(x) => match &x.fields {
-            syn::Fields::Named(x) => &x.named,
-            _ => panic!(),
+    let fields = match input.data {
+        syn::Data::Struct(x) => match x.fields {
+            syn::Fields::Named(x) => x.named,
+            _ => panic!("0"),
         },
-        _ => panic!(),
+        _ => panic!("1"),
     };
-    for field in fields.iter().rev() {
+    let first_as_key = fields.first().unwrap().ident.as_ref().unwrap().to_owned();
+    for field in fields.into_iter().rev() {
         let name = &field.ident;
+        let ty_span = field.ty.span();
         let ty = match &field.ty {
-            syn::Type::Path(x) => {
-                let x = x
+            syn::Type::Path(type_path) => {
+                let path_segment = type_path
                     .path
                     .segments
                     .iter()
                     .at_most_one()
-                    .unwrap_or_else(|_| panic!())
+                    .unwrap_or_else(|_| panic!("2"))
                     .unwrap();
-                assert!(matches!(x.arguments, PathArguments::None));
-                let ident = &x.ident;
-                let x = ident.to_string();
-                let x = match x.as_str() {
+                assert!(matches!(path_segment.arguments, PathArguments::None));
+                let ident = &path_segment.ident;
+                let ident_str = ident.to_string();
+                let sql_ident_str = match ident_str.as_str() {
                     "i64" => "BigInt",
                     "String" => "Text",
                     "f32" => "Float",
                     "bool" => "Bool",
-                    //"Timestamp" => "Timestamp",
-                    _ => panic!("unknown type: {x}"),
+                    "NaiveDateTime" => "Timestamp",
+                    _ => panic!("/unknown type: {ident_str}/"),
                 };
-                syn::Ident::new(x, ident.span())
+                syn::Type::Path(syn::parse_str(sql_ident_str).unwrap())
             }
-            _ => panic!(),
+            _ => field.ty,
         };
         //field.attrs
-        output = quote! {
+        output = quote_spanned! {
+            ty_span =>
             #name -> #ty,
             #output
         };
@@ -53,7 +56,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
             //dbg!(quote!{#x});
             //dbg!(x.tokens.to_string());
             //x.parse_args()
-            if let Ok(Some(seg)) = x.path.segments.iter().at_most_one() {
+            if let Ok(Some(seg)) = x.path().segments.iter().at_most_one() {
                 if seg.ident.to_string() == "name_table" {
                     let ident = x.parse_args().unwrap();
                     //dbg!(&ident);
@@ -63,7 +66,6 @@ pub fn derive(input: TokenStream) -> TokenStream {
             None
         })
         .unwrap();
-    let first_as_key = &fields.first().unwrap().ident.as_ref().unwrap();
     let ret = quote! {
         diesel::table! {
             #ident (#first_as_key) {
